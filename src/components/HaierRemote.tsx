@@ -212,10 +212,12 @@ export function HaierRemote({
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={onCycleSpeed}
-          className={`col-start-2 row-start-2 flex flex-col items-center justify-center gap-0.5 rounded-full font-extrabold text-white shadow-md ${compact ? "text-[10px]" : "text-xs"}`}
+          className={`col-start-2 row-start-2 flex aspect-square place-self-center flex-col items-center justify-center gap-0.5 rounded-full font-extrabold text-white shadow-md ${
+            compact ? "w-12 text-[10px]" : "w-16 text-xs"
+          }`}
           style={{ background: "#64748b" }}
         >
-          <span className={`leading-none ${compact ? "text-sm" : "text-lg"}`}>🌀</span>
+          <span className={`leading-none ${compact ? "text-base" : "text-xl"}`}>🌀</span>
           FAN
         </motion.button>
         <motion.button

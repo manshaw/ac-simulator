@@ -30,12 +30,14 @@ export function ACIndoorUnit({
     >
       <div className="flex items-center justify-between px-4 pt-3">
         <span className="h-2 w-8 rounded-full bg-blue-400/70" />
-        {/* Digital temperature display on the unit */}
-        {power && !hideDisplay && (
-          <div className="rounded-md bg-slate-900 px-2.5 py-1 shadow-inner">
-            <span className="font-mono text-lg font-extrabold tabular-nums transition-colors" style={{ color: digitalColor }}>
-              {mode === "clean" ? "CL" : `${temp}°`}
-            </span>
+        {/* Digital display screen on the unit */}
+        {power && (
+          <div className="min-w-12 rounded-md bg-slate-900 px-2.5 py-1 text-center shadow-inner">
+            {!hideDisplay && (
+              <span className="font-mono text-lg font-extrabold tabular-nums transition-colors" style={{ color: digitalColor }}>
+                {mode === "clean" ? "CL" : `${temp}°`}
+              </span>
+            )}
           </div>
         )}
         <span className="text-[10px] font-bold text-slate-400">{power ? "ON" : "OFF"}</span>
