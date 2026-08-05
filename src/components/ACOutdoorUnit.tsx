@@ -14,7 +14,6 @@ export function ACOutdoorUnit({ power, brand }: { power: boolean; brand: ACBrand
       animate={{ y: 0, opacity: 1 }}
       className="relative flex w-full overflow-hidden rounded-xl shadow-2xl"
       style={{
-        height: 230,
         background: "linear-gradient(180deg, #f1f3f5 0%, #dfe3e6 45%, #c7cdd2 100%)",
         border: "1px solid #b7bec4",
       }}
@@ -30,7 +29,7 @@ export function ACOutdoorUnit({ power, brand }: { power: boolean; brand: ACBrand
       <div className="absolute -top-1 left-14 z-20 h-3 w-3 rounded-full border-2 border-slate-400 bg-slate-200" />
 
       {/* Fan grille panel */}
-      <div className="relative m-3 flex aspect-square h-[calc(100%-1.5rem)] items-center justify-center rounded-md bg-[#e7e9ec] shadow-inner">
+      <div className="relative m-3 flex aspect-square w-[42%] shrink-0 items-center justify-center rounded-md bg-[#e7e9ec] shadow-inner sm:w-[38%]">
         {/* corner screws */}
         {[
           { top: 6, left: 6 },
@@ -91,9 +90,9 @@ export function ACOutdoorUnit({ power, brand }: { power: boolean; brand: ACBrand
       </div>
 
       {/* Right panel: badge sticker + vents */}
-      <div className="relative flex flex-1 flex-col justify-between py-4 pr-4 pl-1">
-        <div className="flex justify-end">
-          <div className="rounded-sm bg-white/90 p-1.5 shadow-sm">
+      <div className="relative flex min-w-0 flex-1 flex-col justify-between py-4 pr-6 pl-1">
+        <div className="flex min-w-0 justify-end">
+          <div className="max-w-full min-w-0 rounded-sm bg-white/90 p-1.5 shadow-sm">
             <BrandBadge brand={brand} />
           </div>
         </div>

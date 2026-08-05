@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BackButton } from "../components/BackButton";
 import { HaierRemote } from "../components/HaierRemote";
+import { LockIndicator } from "../components/LockIndicator";
 import { ACIndoorUnit } from "../components/ACIndoorUnit";
 import { ACOutdoorUnit } from "../components/ACOutdoorUnit";
 import { MODE_EMOJI, SPEEDS } from "../data/acModes";
@@ -18,6 +19,7 @@ const MODE_AIRFLOW: Record<ACMode, { bar: string; digital: string; particle?: st
   dry: { bar: "rgba(94,234,212,0.75)", digital: "#2dd4bf" },
   auto: { bar: "rgba(199,210,254,0.75)", digital: "#a5b4fc" },
   ice: { bar: "rgba(165,243,252,0.9)", digital: "#67e8f9", particle: "❄️" },
+  clean: { bar: "rgba(216,180,254,0.75)", digital: "#c084fc" },
 };
 
 export function ACScreen({ onBack }: { onBack: () => void }) {
@@ -27,6 +29,7 @@ export function ACScreen({ onBack }: { onBack: () => void }) {
   const [speed, setSpeed] = useState<FanSpeed>("med");
   const [swing, setSwing] = useState(false);
   const [lcdGlow, setLcdGlow] = useState(false);
+  const [locked, setLocked] = useState(false);
   const [flash, setFlash] = useState<string | null>(null);
   const [brandId, setBrandId] = useState(AC_BRANDS[0].id);
   const { click, chime, startHum, stopHum } = useSound();
@@ -86,6 +89,12 @@ export function ACScreen({ onBack }: { onBack: () => void }) {
     setLcdGlow((l) => !l);
   };
 
+  const toggleLock = () => {
+    click();
+    setLocked((l) => !l);
+    bump(!locked ? "Locked!" : "Unlocked!");
+  };
+
   const decorative = (label: string) => {
     click();
     bump(label);
@@ -97,7 +106,8 @@ export function ACScreen({ onBack }: { onBack: () => void }) {
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-gradient-to-b from-teal-100 via-emerald-50 to-slate-100 px-4 py-8 dark:from-slate-800 dark:via-slate-900 dark:to-slate-950">
       <BackButton onClick={onBack} />
-      <h1 className="mb-3 text-2xl font-extrabold text-slate-700 sm:text-4xl dark:text-slate-100">
+      <LockIndicator show={locked} />
+      <h1 className="mb-3 px-16 text-center text-xl font-extrabold text-slate-700 sm:text-4xl dark:text-slate-100">
         My Air Conditioner {MODE_EMOJI[mode]}
       </h1>
 
@@ -133,7 +143,15 @@ export function ACScreen({ onBack }: { onBack: () => void }) {
       <div className="relative flex w-full max-w-md flex-col items-center justify-between">
         {/* Indoor unit */}
         <div className="relative z-10 mx-auto w-full max-w-sm">
-          <ACIndoorUnit power={power} swing={swing} temp={temp} digitalColor={airflow.digital} brand={brand} />
+          <ACIndoorUnit
+            power={power}
+            swing={swing}
+            mode={mode}
+            temp={temp}
+            digitalColor={airflow.digital}
+            brand={brand}
+            hideDisplay={lcdGlow}
+          />
           {/* airflow */}
           {power && (
             <div className="pointer-events-none absolute left-1/2 top-full h-28 w-40 -translate-x-1/2">
@@ -206,6 +224,7 @@ export function ACScreen({ onBack }: { onBack: () => void }) {
           flash={flash}
           showIce
           compact
+          locked={locked}
           onTogglePower={togglePower}
           onSetMode={setModeDirect}
           onCycleSpeed={cycleSpeed}
@@ -213,6 +232,7 @@ export function ACScreen({ onBack }: { onBack: () => void }) {
           onChangeTemp={changeTemp}
           onQuiet={quiet}
           onToggleLight={toggleLight}
+          onToggleLock={toggleLock}
           onDecorative={decorative}
         />
       </div>

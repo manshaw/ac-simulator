@@ -4,7 +4,7 @@ export function BrandBadge({ brand, size = "md" }: { brand: ACBrand; size?: "sm"
   const isSmall = size === "sm";
   return (
     <div
-      className={`flex items-center justify-center rounded-full shadow-sm ${
+      className={`flex max-w-full min-w-0 items-center justify-center rounded-full shadow-sm ${
         isSmall ? "h-4 w-14" : "h-6 w-24"
       }`}
       style={{
@@ -13,7 +13,7 @@ export function BrandBadge({ brand, size = "md" }: { brand: ACBrand; size?: "sm"
       }}
     >
       <span
-        className={`font-extrabold italic tracking-tight ${isSmall ? "text-[6px]" : "text-[10px]"}`}
+        className={`min-w-0 truncate px-1 font-extrabold italic tracking-tight ${isSmall ? "text-[6px]" : "text-[10px]"}`}
         style={{ color: brand.text }}
       >
         {brand.name}

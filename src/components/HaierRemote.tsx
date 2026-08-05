@@ -8,6 +8,7 @@ const MODE_ICON: Record<ACMode, string> = {
   dry: "💧",
   auto: "A",
   ice: "🧊",
+  clean: "🧼",
 };
 
 const SPEED_BARS: Record<FanSpeed, number> = { low: 1, med: 2, high: 3 };
@@ -22,6 +23,7 @@ export function HaierRemote({
   flash,
   showIce = false,
   compact = false,
+  locked,
   onTogglePower,
   onSetMode,
   onCycleSpeed,
@@ -29,6 +31,7 @@ export function HaierRemote({
   onChangeTemp,
   onQuiet,
   onToggleLight,
+  onToggleLock,
   onDecorative,
 }: {
   power: boolean;
@@ -40,6 +43,7 @@ export function HaierRemote({
   flash: string | null;
   showIce?: boolean;
   compact?: boolean;
+  locked: boolean;
   onTogglePower: () => void;
   onSetMode: (m: ACMode) => void;
   onCycleSpeed: () => void;
@@ -47,9 +51,12 @@ export function HaierRemote({
   onChangeTemp: (delta: number) => void;
   onQuiet: () => void;
   onToggleLight: () => void;
+  onToggleLock: () => void;
   onDecorative: (label: string) => void;
 }) {
   const bars = SPEED_BARS[speed];
+  const showClean = mode === "clean" && power;
+  const lockedStyle = locked ? "pointer-events-none opacity-40" : "";
 
   return (
     <motion.div
@@ -77,9 +84,9 @@ export function HaierRemote({
         >
           <span className={compact ? "text-2xl" : "text-4xl"}>{bars >= 1 ? "◟" : ""}</span>
           <span className={`font-extrabold leading-none tabular-nums ${compact ? "text-4xl" : "text-6xl"}`}>
-            {power ? temp : "24"}
+            {showClean ? "CL" : power ? temp : "24"}
           </span>
-          <span className={`mb-2 ${compact ? "text-xs" : "text-base"}`}>°C</span>
+          {!showClean && <span className={`mb-2 ${compact ? "text-xs" : "text-base"}`}>°C</span>}
         </div>
         <div className="flex items-center justify-between px-1" style={{ opacity: power ? 1 : 0.15 }}>
           <div className="flex items-end gap-0.5">
@@ -110,7 +117,7 @@ export function HaierRemote({
       </div>
 
       {/* Quiet + Power */}
-      <div className="flex w-full items-center justify-around">
+      <div className={`flex w-full items-center justify-around ${lockedStyle}`}>
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={onQuiet}
@@ -129,8 +136,8 @@ export function HaierRemote({
         </motion.button>
       </div>
 
-      {/* Cool / Heat / Dry / (Ice) */}
-      <div className={`grid w-full gap-2 ${showIce ? "grid-cols-4" : "grid-cols-3"}`}>
+      {/* Cool / Heat / Clean / (Ice) */}
+      <div className={`grid w-full gap-2 ${showIce ? "grid-cols-4" : "grid-cols-3"} ${lockedStyle}`}>
         <motion.button
           whileTap={{ scale: 0.92 }}
           onClick={() => onSetMode("cool")}
@@ -157,15 +164,15 @@ export function HaierRemote({
         </motion.button>
         <motion.button
           whileTap={{ scale: 0.92 }}
-          onClick={() => onSetMode("dry")}
+          onClick={() => onSetMode("clean")}
           className={`rounded-xl border-2 font-extrabold shadow ${compact ? "py-2 text-[10px]" : "py-3 text-xs sm:text-sm"}`}
           style={{
-            background: mode === "dry" && power ? "#e2e8f0" : "#f8fafc",
-            borderColor: "#94a3b8",
-            color: "#334155",
+            background: mode === "clean" && power ? "#d8b4fe" : "#f3e8ff",
+            borderColor: "#a855f7",
+            color: "#6b21a8",
           }}
         >
-          DRY
+          CLEAN
         </motion.button>
         {showIce && (
           <motion.button
@@ -184,7 +191,9 @@ export function HaierRemote({
       </div>
 
       {/* Temp / Auto / Fan / Swing wheel */}
-      <div className={`grid w-full grid-cols-3 grid-rows-3 rounded-[2rem] border-2 border-slate-200 bg-slate-50 ${compact ? "gap-1.5 p-2" : "gap-2 p-3"}`}>
+      <div
+        className={`grid w-full grid-cols-3 grid-rows-3 rounded-[2rem] border-2 border-slate-200 bg-slate-50 ${compact ? "gap-1.5 p-2" : "gap-2 p-3"} ${lockedStyle}`}
+      >
         <motion.button
           whileTap={{ scale: 0.92 }}
           onClick={() => onChangeTemp(1)}
@@ -229,7 +238,7 @@ export function HaierRemote({
       {!compact && (
         <>
           {/* Timer / Up / Extra function */}
-          <div className="grid w-full grid-cols-3 gap-2">
+          <div className={`grid w-full grid-cols-3 gap-2 ${lockedStyle}`}>
             <motion.button
               whileTap={{ scale: 0.92 }}
               onClick={() => onDecorative("Timer")}
@@ -255,7 +264,7 @@ export function HaierRemote({
           </div>
 
           {/* Health / Down / Confirm-Cancel */}
-          <div className="grid w-full grid-cols-3 gap-2">
+          <div className={`grid w-full grid-cols-3 gap-2 ${lockedStyle}`}>
             <motion.button
               whileTap={{ scale: 0.92 }}
               onClick={() => onDecorative("Health")}
@@ -285,15 +294,16 @@ export function HaierRemote({
       {/* Lock / Light / Reset */}
       <div className={`grid w-full grid-cols-3 pt-1 ${compact ? "gap-1" : "gap-2"}`}>
         {[
-          { label: "LOCK", onClick: () => onDecorative("Locked!"), active: false },
-          { label: "LIGHT", onClick: onToggleLight, active: lcdGlow },
-          { label: "RESET", onClick: () => onDecorative("Reset!"), active: false },
+          { label: "LOCK", onClick: onToggleLock, active: locked, alwaysEnabled: true },
+          { label: "LIGHT", onClick: onToggleLight, active: lcdGlow, alwaysEnabled: false },
+          { label: "RESET", onClick: () => onDecorative("Reset!"), active: false, alwaysEnabled: false },
         ].map((btn) => (
           <motion.button
             key={btn.label}
             whileTap={{ scale: 0.85 }}
             onClick={btn.onClick}
-            className="flex flex-col items-center gap-1.5 py-1"
+            aria-label={btn.label}
+            className={`flex flex-col items-center gap-1.5 py-1 ${!btn.alwaysEnabled ? lockedStyle : ""}`}
           >
             <span
               className={`rounded-full border-2 ${compact ? "h-4 w-4" : "h-5 w-5"}`}

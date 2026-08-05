@@ -1,6 +1,6 @@
 export type Screen = "home" | "remote-select" | "remote" | "fan-select" | "fan" | "ac";
 
-export type ACMode = "cool" | "heat" | "fan" | "dry" | "auto" | "ice";
+export type ACMode = "cool" | "heat" | "fan" | "dry" | "auto" | "ice" | "clean";
 export type FanSpeed = "low" | "med" | "high";
 
 export interface RemoteTheme {

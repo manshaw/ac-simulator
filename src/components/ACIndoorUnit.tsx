@@ -1,21 +1,26 @@
 import { motion } from "framer-motion";
 import { BrandBadge } from "./BrandBadge";
 import type { ACBrand } from "../data/acBrands";
+import type { ACMode } from "../types";
 
 const FIN_COUNT = 6;
 
 export function ACIndoorUnit({
   power,
   swing,
+  mode,
   temp,
   digitalColor,
   brand,
+  hideDisplay,
 }: {
   power: boolean;
   swing: boolean;
+  mode: ACMode;
   temp: number;
   digitalColor: string;
   brand: ACBrand;
+  hideDisplay: boolean;
 }) {
   return (
     <motion.div
@@ -26,14 +31,13 @@ export function ACIndoorUnit({
       <div className="flex items-center justify-between px-4 pt-3">
         <span className="h-2 w-8 rounded-full bg-blue-400/70" />
         {/* Digital temperature display on the unit */}
-        <div className="rounded-md bg-slate-900 px-2.5 py-1 shadow-inner">
-          <span
-            className="font-mono text-lg font-extrabold tabular-nums transition-colors"
-            style={{ color: power ? digitalColor : "#334155" }}
-          >
-            {power ? `${temp}°` : "--°"}
-          </span>
-        </div>
+        {power && !hideDisplay && (
+          <div className="rounded-md bg-slate-900 px-2.5 py-1 shadow-inner">
+            <span className="font-mono text-lg font-extrabold tabular-nums transition-colors" style={{ color: digitalColor }}>
+              {mode === "clean" ? "CL" : `${temp}°`}
+            </span>
+          </div>
+        )}
         <span className="text-[10px] font-bold text-slate-400">{power ? "ON" : "OFF"}</span>
       </div>
 
