@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { BackButton } from "../components/BackButton";
 import { HaierRemote } from "../components/HaierRemote";
-import { LockIndicator } from "../components/LockIndicator";
 import { ACIndoorUnit } from "../components/ACIndoorUnit";
 import { ACOutdoorUnit } from "../components/ACOutdoorUnit";
 import { MODE_EMOJI, SPEEDS } from "../data/acModes";
@@ -106,7 +105,6 @@ export function ACScreen({ onBack }: { onBack: () => void }) {
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-gradient-to-b from-teal-100 via-emerald-50 to-slate-100 px-4 py-8 dark:from-slate-800 dark:via-slate-900 dark:to-slate-950">
       <BackButton onClick={onBack} />
-      <LockIndicator show={locked} />
       <h1 className="mb-3 px-16 text-center text-xl font-extrabold text-slate-700 sm:text-4xl dark:text-slate-100">
         My Air Conditioner {MODE_EMOJI[mode]}
       </h1>

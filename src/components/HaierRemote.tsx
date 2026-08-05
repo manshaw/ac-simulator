@@ -75,6 +75,14 @@ export function HaierRemote({
           boxShadow: lcdGlow ? "0 0 18px 4px rgba(250,204,21,0.55), inset 0 2px 6px rgba(0,0,0,0.25)" : "inset 0 2px 6px rgba(0,0,0,0.25)",
         }}
       >
+        {locked && (
+          <span
+            className={`absolute top-1.5 right-2 ${compact ? "text-xs" : "text-sm"}`}
+            style={{ color: "#2f3a32" }}
+          >
+            🔒
+          </span>
+        )}
         <div className={`flex items-center justify-center gap-1 ${compact ? "text-base" : "text-xl"}`} style={{ color: "#3a463d", opacity: power ? 1 : 0.15 }}>
           <span>{MODE_ICON[mode]}</span>
         </div>

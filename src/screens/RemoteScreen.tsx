@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BackButton } from "../components/BackButton";
 import { HaierRemote } from "../components/HaierRemote";
-import { LockIndicator } from "../components/LockIndicator";
 import { useTheme } from "../contexts/ThemeContext";
 import { useSound } from "../hooks/useSound";
 import type { ACMode, FanSpeed, RemoteTheme } from "../types";
@@ -171,7 +170,6 @@ export function RemoteScreen({ theme, onBack }: { theme: RemoteTheme; onBack: ()
         style={{ background: `linear-gradient(180deg, ${theme.accentSoft}, ${isDark ? "#0f172a" : "#ffffff"})` }}
       >
         <BackButton onClick={onBack} />
-        <LockIndicator show={locked} />
         <HaierRemote
           power={power}
           mode={mode}
