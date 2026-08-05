@@ -7,8 +7,23 @@ function getCtx(): AudioContext | null {
   const AC = window.AudioContext ?? (window as any).webkitAudioContext;
   if (!AC) return null;
   if (!sharedCtx) sharedCtx = new AC();
-  if (sharedCtx.state === "suspended") void sharedCtx.resume();
+  if (sharedCtx.state === "suspended") sharedCtx.resume().catch(() => {});
   return sharedCtx;
+}
+
+// iOS/Android only allow an AudioContext to be created or resumed inside the
+// exact call stack of a user gesture. Unlocking on the very first touch/click
+// anywhere on the page (rather than waiting for a specific sound-triggering
+// button) gives it the best chance of being "running" by the time a real
+// sound needs to play.
+if (typeof window !== "undefined") {
+  const unlock = () => {
+    getCtx();
+    window.removeEventListener("touchend", unlock);
+    window.removeEventListener("pointerdown", unlock);
+  };
+  window.addEventListener("touchend", unlock, { once: true, passive: true });
+  window.addEventListener("pointerdown", unlock, { once: true });
 }
 
 /** Kid-friendly synthesized sound effects, no audio files needed. */

@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { PowerIcon } from "./PowerIcon";
 import type { ACMode, FanSpeed } from "../types";
 
 const MODE_ICON: Record<ACMode, string> = {
@@ -137,10 +138,10 @@ export function HaierRemote({
           whileTap={{ scale: 0.88 }}
           onClick={onTogglePower}
           aria-label="Power"
-          className={`flex items-center justify-center rounded-full text-white shadow-md ${compact ? "h-10 w-10 text-lg" : "h-14 w-14 text-2xl"}`}
+          className={`flex items-center justify-center rounded-full text-white shadow-md ${compact ? "h-10 w-10" : "h-14 w-14"}`}
           style={{ background: power ? "#dc2626" : "#f87171" }}
         >
-          ⏻
+          <PowerIcon className={compact ? "h-5 w-5" : "h-7 w-7"} />
         </motion.button>
       </div>
 

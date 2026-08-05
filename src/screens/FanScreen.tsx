@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BackButton } from "../components/BackButton";
+import { PowerIcon } from "../components/PowerIcon";
 import { useTheme } from "../contexts/ThemeContext";
 import { useSound } from "../hooks/useSound";
 import type { FanSpeed, FanTheme } from "../types";
@@ -167,10 +168,11 @@ export function FanScreen({ theme, onBack }: { theme: FanTheme; onBack: () => vo
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={togglePower}
-          className="flex h-20 w-20 items-center justify-center rounded-full text-3xl text-white shadow-lg"
+          aria-label="Power"
+          className="flex h-20 w-20 items-center justify-center rounded-full text-white shadow-lg"
           style={{ background: power ? "#22c55e" : "#94a3b8" }}
         >
-          ⏻
+          <PowerIcon className="h-9 w-9" />
         </motion.button>
 
         <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4">

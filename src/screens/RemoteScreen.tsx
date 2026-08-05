@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BackButton } from "../components/BackButton";
 import { HaierRemote } from "../components/HaierRemote";
+import { PowerIcon } from "../components/PowerIcon";
 import { useTheme } from "../contexts/ThemeContext";
 import { useSound } from "../hooks/useSound";
 import type { ACMode, FanSpeed, RemoteTheme } from "../types";
@@ -259,12 +260,12 @@ export function RemoteScreen({ theme, onBack }: { theme: RemoteTheme; onBack: ()
           whileTap={{ scale: 0.88 }}
           onClick={togglePower}
           className={`relative z-10 flex items-center justify-center rounded-full text-white shadow-md ${
-            isRealistic ? "h-12 w-12 text-lg" : "h-16 w-16 text-2xl"
+            isRealistic ? "h-12 w-12" : "h-16 w-16"
           }`}
           style={{ background: power ? "#ef4444" : "#94a3b8" }}
           aria-label="Power"
         >
-          ⏻
+          <PowerIcon className={isRealistic ? "h-6 w-6" : "h-8 w-8"} />
         </motion.button>
 
         {/* Temp controls */}
